@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include"backend/src/headers.h"
+#include<string.h>
 #ifndef UX
 #define UX
 
@@ -33,5 +34,15 @@ int showmenu(int status){
     return choice;
 }
 
+struct Product showCreateProduct(){
+    struct Product pdt;
+    printf("Enter product name : \n");
+    scanf("\n%[^\n]s", pdt.name);
+    printf("Enter product quantity : \n");
+    scanf("%d", &pdt.quantity);
+    return pdt;
+}
+
+ 
 
 #endif

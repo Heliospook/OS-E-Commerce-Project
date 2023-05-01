@@ -7,7 +7,7 @@
 #include<stdlib.h>
 #include<sys/stat.h>
 
-#include"backend/headers.h"
+#include"backend/src/headers.h"
 #include"ux.h"
 
 int main(){
@@ -17,9 +17,10 @@ int main(){
     struct sockaddr_in server ;
     server.sin_addr.s_addr = INADDR_ANY;  
     server.sin_family = AF_UNIX;
-    server.sin_port = htonl(5050);
+    server.sin_port = htonl(5501);
 
     int ret = connect(sd, (struct sockaddr *)&server, sizeof(server));
+    perror("connect");
     if(ret == -1){
         printf("Failed to connect.");
         return 0;
@@ -50,6 +51,21 @@ int main(){
     //-------------------------------Menu----------------------------------
     while(1){
         int choice = showmenu(status);
+        write(sd, &choice, sizeof(choice));
+        if(status == 1){
+            if(choice == 2){
+                struct Product pdt = showCreateProduct();
+                write(sd, &pdt, sizeof(pdt));
+                int result = 0;
+                read(sd, &result, sizeof(result));
+                drawline();
+                if(result <= 0){
+                    printf("Pdt. creation failed.\n");
+                }else{
+                    printf("Pdt. created successfully with id = %d\n", result - 1);
+                }
+            }
+        }
         if(choice == 5) break;
     }
     close(sd);
