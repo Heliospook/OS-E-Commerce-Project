@@ -17,7 +17,7 @@ int main(){
     struct sockaddr_in server ;
     server.sin_addr.s_addr = INADDR_ANY;  
     server.sin_family = AF_UNIX;
-    server.sin_port = htonl(5501);
+    server.sin_port = htonl(5500);
 
     int ret = connect(sd, (struct sockaddr *)&server, sizeof(server));
     perror("connect");
@@ -82,11 +82,13 @@ int main(){
                     printf("Product updated successfully.\n");
                 }else printf("Product updation failed.\n");
             }else if(choice == 4){
-                int pdtid = showDeleteProduct();
+                int result = 0, pdtid;
+                pdtid = showDeleteProduct();
                 write(sd, &pdtid, sizeof(int));
-                int result = 1;
+                perror("client write");
                 read(sd, &result, sizeof(int));
-
+                perror("client read");
+                printf("result : %d\n", result);
                 if(result){
                     printf("Product deleted successfully.\n");
                 }else printf("Such a product was not found.\n");

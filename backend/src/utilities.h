@@ -8,6 +8,9 @@
 #ifndef UTILITIES
 #define UTILITIES
 
+#define USERFILE "backend/database/users.dat"
+#define PRODFILE "backend/database/products.dat"
+
 union semun{
     int val;
     struct semid_ds *buff;
@@ -17,7 +20,7 @@ union semun{
 int login(char *username, char *password){
     struct User users[10];
     int numusers;
-    FILE* userfile = (FILE *) fopen("database/users.dat", "rb");
+    FILE* userfile = (FILE *) fopen(USERFILE, "rb");
     fread(&numusers, sizeof(numusers), 1, userfile);
     fread(users, sizeof(struct User), numusers, userfile);
     for(int i=0;i<numusers;i++){
@@ -41,13 +44,13 @@ void createuser(){
 
     struct User users[10];
     int numusers = 0;
-    FILE* userfile = (FILE *) fopen("database/users.dat", "rb");
+    FILE* userfile = (FILE *) fopen(USERFILE, "rb");
     fread(&numusers, sizeof(numusers), 1, userfile);
     fread(users, sizeof(struct User), numusers, userfile);
     users[numusers++] = newuser;
     fclose(userfile);
     
-    userfile = (FILE *) fopen("database/users.dat", "wb");
+    userfile = (FILE *) fopen(USERFILE, "wb");
     fwrite(&numusers, sizeof(numusers), 1, userfile);
     fwrite(&users, sizeof(struct User), numusers, userfile);
     fclose(userfile);
@@ -55,7 +58,7 @@ void createuser(){
 
 int initsemaphores(int semid){
     int n = 0; //number of products
-    FILE* productfile = (FILE *) fopen("database/products.dat", "rb+");
+    FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
     fread(&n, sizeof(n), 1, productfile);
     struct Product pdts[256];
     fread(pdts, sizeof(struct Product), n, productfile);
@@ -76,7 +79,7 @@ int initsemaphores(int semid){
 
 int createProduct(struct Product* pdt){
     int n = 0, newid = 0;
-    FILE* productfile = (FILE *) fopen("database/products.dat", "rb+");
+    FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
     fread(&n, sizeof(int), 1, productfile);
     fread(&newid, sizeof(int), 1, productfile);
     if(n >= 256) return PDT_CREATION_FAILED;
@@ -102,7 +105,7 @@ int createProduct(struct Product* pdt){
 }
 
 int readProducts(struct Product **products){
-    FILE* productfile = (FILE *) fopen("database/products.dat", "rb");
+    FILE* productfile = (FILE *) fopen(PRODFILE, "rb");
     int n = 0;
     fread(&n, sizeof(int), 1, productfile);
     fseek(productfile, 2*sizeof(int), SEEK_SET);
@@ -121,7 +124,7 @@ int readProducts(struct Product **products){
 }
 
 int updateProduct(struct Product pdt){
-    FILE* productfile = (FILE *) fopen("database/products.dat", "rb+");
+    FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
 
     int address = 2*sizeof(int) + pdt.id * sizeof(struct Product);
     fseek(productfile, address, SEEK_SET);
@@ -141,12 +144,11 @@ int updateProduct(struct Product pdt){
 }
 
 int deleteProduct(int pdtid){
-    FILE* productfile = (FILE *) fopen("database/products.dat", "rb+");
+    FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
     int n = 0;
     fread(&n, sizeof(int), 1, productfile);
     int newid = 0;
     fread(&newid, sizeof(int), 1, productfile);
-
     int address = 2*sizeof(int) + pdtid*sizeof(struct Product);
     fseek(productfile, 0, SEEK_END);
     int offset = ftell(productfile);
@@ -172,13 +174,13 @@ int deleteProduct(int pdtid){
     fwrite(&temp, sizeof(struct Product), 1, productfile);
     fclose(productfile);
 
-    return 0;
+    return 1;
 }
 
 
 void writeone(){
     int n = 0;
-    FILE* productfile = (FILE *) fopen("database/products.dat", "wb+");
+    FILE* productfile = (FILE *) fopen(PRODFILE, "wb+");
     fwrite(&n, sizeof(n), 1, productfile);
 }
 

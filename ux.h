@@ -40,6 +40,8 @@ struct Product showCreateProduct(){
     scanf("\n%[^\n]s", pdt.name);
     printf("Enter product quantity : \n");
     scanf("%d", &pdt.quantity);
+    printf("Enter product price : \n");
+    scanf("%lf", &pdt.price);
     return pdt;
 }
 
@@ -48,7 +50,7 @@ void showproducts(struct Product *products, int n){
     printf("Here is the list of all available products : \n");
     drawline();
     for(int i=0;i<n;i++){
-        printf("%d) %s : %d left\n", products[i].id, products[i].name, products[i].quantity);
+        printf("%d) %s : %d left - %0.2lf inr\n", products[i].id, products[i].name, products[i].quantity, products[i].price);
     }
     drawline();
 }
@@ -61,6 +63,8 @@ struct Product showUpdateProduct(){
     scanf("\n%[^\n]s", pdt.name);
     printf("Enter product quantity : \n");
     scanf("%d", &pdt.quantity);
+    printf("Enter product price : \n");
+    scanf("%lf", &pdt.price);
     return pdt;
 }
 
