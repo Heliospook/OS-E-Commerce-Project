@@ -22,7 +22,7 @@ int main(){
     int ret = connect(sd, (struct sockaddr *)&server, sizeof(server));
     perror("connect");
     if(ret == -1){
-        printf("Failed to connect.");
+        printf("Failed to connect.\n");
         return 0;
     }
 
@@ -53,9 +53,18 @@ int main(){
         int choice = showmenu(status);
         write(sd, &choice, sizeof(choice));
         if(status == 1){
-            if(choice == 2){
+            if(choice == 1){
+                int n = 0;
+                read(sd, &n, sizeof(int));
+                struct Product *products  = (struct Product *) malloc(n * sizeof(struct Product));
+                for(int i=0;i<n;i++){
+                    read(sd, products + i, sizeof(struct Product));
+                }
+                showproducts(products, n);
+            }
+            else if(choice == 2){
                 struct Product pdt = showCreateProduct();
-                write(sd, &pdt, sizeof(pdt));
+                write(sd, &pdt, sizeof(struct Product));
                 int result = 0;
                 read(sd, &result, sizeof(result));
                 drawline();
@@ -64,6 +73,23 @@ int main(){
                 }else{
                     printf("Pdt. created successfully with id = %d\n", result - 1);
                 }
+            }else if(choice == 3){
+                struct Product pdt = showUpdateProduct();
+                write(sd, &pdt, sizeof(struct Product));
+                int result = 1;
+                read(sd, &result, sizeof(int));
+                if(result){
+                    printf("Product updated successfully.\n");
+                }else printf("Product updation failed.\n");
+            }else if(choice == 4){
+                int pdtid = showDeleteProduct();
+                write(sd, &pdtid, sizeof(int));
+                int result = 1;
+                read(sd, &result, sizeof(int));
+
+                if(result){
+                    printf("Product deleted successfully.\n");
+                }else printf("Such a product was not found.\n");
             }
         }
         if(choice == 5) break;

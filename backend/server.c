@@ -19,12 +19,12 @@ int main(){
         return 0;
     }
 
-    int n = initsemaphores(semid);
-    if(n == -1){
+    int num = initsemaphores(semid);
+    if(num == -1){
         printf("Couldn't open product file\n");
         return 0;
     }
-    printf("%d products found.\n", n);
+    printf("%d products found.\n", num);
 
 //-------------server socket code -------------
 
@@ -61,14 +61,37 @@ int main(){
                 read(newsd, &choice, sizeof(choice));
                 printf("Choice : %d\n", choice);
                 if(ret == 1){
-                    if(choice == 2){
+                    if(choice == 1){
+                        struct Product *pdts = (struct Product *) malloc(256*sizeof(struct Product));
+                        int n = readProducts(&pdts);
+                        write(newsd, &n, sizeof(int));
+                        for(int i=0;i<n;i++){
+                            write(newsd, pdts + i, sizeof(struct Product));
+                        }
+                    }else if(choice == 2){
                         struct Product pdt;
                         read(newsd, &pdt, sizeof(struct Product));
                         int result = createProduct(&pdt);
                         write(newsd, &result, sizeof(int));
                     }
-                }else{
+                    else if(choice == 3){
+                        int status = 1;
+                        struct Product pdt;
+                        read(newsd, &pdt, sizeof(struct Product));
 
+                        status = updateProduct(pdt);
+                        write(newsd, &status, sizeof(int));
+                    }
+                    else if(choice == 4){
+                        int pdtid = -1, found = 0;
+                        read(newsd, &pdtid, sizeof(int));
+                        found = deleteProduct(pdtid);
+                        write(newsd, &found, sizeof(int));
+                    }
+                }else{
+                    if(choice == 1){
+                        
+                    }
                 }
                 if(choice == 5) break;
             }
