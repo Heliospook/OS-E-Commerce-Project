@@ -11,7 +11,6 @@
 #include"ux.h"
 
 int main(){
-
     int sd = socket(PF_UNIX,SOCK_STREAM,0);
      
     struct sockaddr_in server ;
