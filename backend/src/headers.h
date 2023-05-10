@@ -2,6 +2,7 @@
 #define HEADERS
 
 #define PDT_CREATION_FAILED -10
+#define PORT 5502
 
 struct Product{
     int id;
@@ -15,6 +16,7 @@ struct User{
     char password[100];
     int isAdmin;
     struct Product cart[10];
+    int nCart;
 };
 
 
