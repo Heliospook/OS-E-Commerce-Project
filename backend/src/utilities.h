@@ -10,6 +10,7 @@
 
 #define USERFILE "backend/database/users.dat"
 #define PRODFILE "backend/database/products.dat"
+// #define CARTFILE "backend/database/cart.dat"
 
 union semun{
     int val;
@@ -17,7 +18,7 @@ union semun{
     unsigned short *array;
 };
 
-int login(char *username, char *password){
+struct User login(char *username, char *password){
     struct User users[10];
     int numusers;
     FILE* userfile = (FILE *) fopen(USERFILE, "rb");
@@ -26,11 +27,13 @@ int login(char *username, char *password){
     for(int i=0;i<numusers;i++){
         if(strcmp(users[i].username, username) == 0){
             if(strcmp(users[i].password, password) == 0){
-                return users[i].isAdmin;
+                return users[i];
             }
         }
     }
-    return -1;
+    struct User temp;
+    temp.isAdmin = -1;
+    return temp;
 }
 
 void createuser(){
@@ -45,7 +48,7 @@ void createuser(){
     struct User users[10];
     int numusers = 0;
     FILE* userfile = (FILE *) fopen(USERFILE, "rb");
-    fread(&numusers, sizeof(numusers), 1, userfile);
+    fread(&numusers, sizeof(int), 1, userfile);
     fread(users, sizeof(struct User), numusers, userfile);
     users[numusers++] = newuser;
     fclose(userfile);

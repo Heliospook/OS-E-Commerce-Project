@@ -16,7 +16,7 @@ int main(){
     struct sockaddr_in server ;
     server.sin_addr.s_addr = INADDR_ANY;  
     server.sin_family = AF_UNIX;
-    server.sin_port = htonl(5500);
+    server.sin_port = htonl(5501);
 
     int ret = connect(sd, (struct sockaddr *)&server, sizeof(server));
     perror("connect");
@@ -91,6 +91,16 @@ int main(){
                 if(result){
                     printf("Product deleted successfully.\n");
                 }else printf("Such a product was not found.\n");
+            }
+        }else{
+            if(choice == 1){
+                int n = 0;
+                read(sd, &n, sizeof(int));
+                struct Product *products  = (struct Product *) malloc(n * sizeof(struct Product));
+                for(int i=0;i<n;i++){
+                    read(sd, products + i, sizeof(struct Product));
+                }
+                showproducts(products, n);
             }
         }
         if(choice == 5) break;

@@ -11,6 +11,7 @@
 #include "./src/utilities.h"
 
 int main(){
+
 //------------initializing semaphores---------
     key_t key = ftok(".", 'a');
     int semid = semget(key, 256, 0777 | IPC_CREAT);
@@ -33,12 +34,12 @@ int main(){
     struct sockaddr_in server;
     server.sin_family = AF_UNIX;
     server.sin_addr.s_addr = INADDR_ANY; 
-    server.sin_port = htonl(5500); 
+    server.sin_port = htonl(5501); 
 
     bind(sd,(struct sockaddr *) &server, sizeof(server));
     perror("bind");
 
-    listen(sd,2);
+    listen(sd,10);
     perror("listen");
     while(1){
         struct sockaddr_in client;
@@ -55,7 +56,8 @@ int main(){
     
             struct User user;
             read(newsd, &user, sizeof(user));
-            int ret = login(user.username, user.password);
+            struct User loggedInUser = login(user.username, user.password);
+	    int ret = loggedInUser.isAdmin;
             write(newsd, &ret, sizeof(ret));
             while(1){
                 int choice = 5;
@@ -86,18 +88,19 @@ int main(){
                     else if(choice == 4){
                         int pdtid = -1, found = 0;
                         read(newsd, &pdtid, sizeof(int));
-                        perror("server read");
-                        struct Product pdts[256];
                         found = deleteProduct(pdtid);
                         write(newsd, &found, sizeof(int));
-                        perror("server write");
-
                     }
                 }else{
                     if(choice == 1){
-                        
+                        struct Product *pdts = (struct Product *) malloc(256*sizeof(struct Product));
+                        int n = readProducts(&pdts);
+                        write(newsd, &n, sizeof(int));
+                        for(int i=0;i<n;i++){
+                            write(newsd, pdts + i, sizeof(struct Product));
+                        }
                     }else if(choice == 2){
-
+                        
                     }else if(choice == 3){
 
                     }else if(choice == 4){
