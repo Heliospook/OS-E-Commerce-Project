@@ -16,8 +16,8 @@ int showmenu(int status){
         drawline();
         printf("1) View all products\n");
         printf("2) Add a product\n");
-        printf("3) Delete a product\n");
-        printf("4) Modify a product\n");
+        printf("3) Modify a product\n");
+        printf("4) Delete a product\n");
     }else{
         drawline();
         printf("User Panel \n");
@@ -40,7 +40,39 @@ struct Product showCreateProduct(){
     scanf("\n%[^\n]s", pdt.name);
     printf("Enter product quantity : \n");
     scanf("%d", &pdt.quantity);
+    printf("Enter product price : \n");
+    scanf("%lf", &pdt.price);
     return pdt;
+}
+
+void showproducts(struct Product *products, int n){
+    drawline();
+    printf("Here is the list of all available products : \n");
+    drawline();
+    for(int i=0;i<n;i++){
+        printf("%d) %s : %d left - %0.2lf inr\n", products[i].id, products[i].name, products[i].quantity, products[i].price);
+    }
+    drawline();
+}
+
+struct Product showUpdateProduct(){
+    struct Product pdt;
+    printf("Enter the id of the product to be updated : \n");
+    scanf("%d", &pdt.id);
+    printf("Enter product name : \n");
+    scanf("\n%[^\n]s", pdt.name);
+    printf("Enter product quantity : \n");
+    scanf("%d", &pdt.quantity);
+    printf("Enter product price : \n");
+    scanf("%lf", &pdt.price);
+    return pdt;
+}
+
+int showDeleteProduct(){
+    int pdtid = -1;
+    printf("Enter the id of the product to be deleted : \n");
+    scanf("%d", &pdtid);
+    return pdtid;
 }
 
  
