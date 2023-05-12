@@ -1,5 +1,5 @@
 clean : 
-	rm server client server2
+	rm server client
 	
 main :
 	gcc -o server backend/server.c
