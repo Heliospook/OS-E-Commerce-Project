@@ -9,11 +9,9 @@
 
 #include "./src/headers.h"
 #include "./src/utilities.h"
-#include "ux.h"
 
 
 int main(){
-    
 //------------initializing semaphores---------
     key_t key = ftok(".", 'a');
     int semid = semget(key, 256, 0777 | IPC_CREAT);
@@ -85,20 +83,33 @@ int main(){
                     }else if(choice == 2){
                         struct Product pdt;
                         recv(cfd, &pdt, sizeof(struct Product), 0);
-                        int result = createProduct(&pdt);
+                        int result = createProduct(&pdt, semid);
                         send(cfd, &result, sizeof(int), 0);
+
+                        struct Product *pdts = (struct Product *) malloc(256*sizeof(struct Product));
+                        int n = readProducts(&pdts);
+                        generateLog(pdts, n, user);
                     }
                     else if(choice == 3){
                         struct Product pdt;
                         recv(cfd, &pdt, sizeof(struct Product), 0);
-                        int result = updateProduct(pdt);
+                        int result = updateProduct(pdt, semid);
                         send(cfd, &result, sizeof(int), 0);
+
+                        struct Product *pdts = (struct Product *) malloc(256*sizeof(struct Product));
+                        int n = readProducts(&pdts);
+                        generateLog(pdts, n, user);
                     }
                     else if(choice == 4){
                         int pdtid;
                         recv(cfd, &pdtid, sizeof(int), 0);         
-                        int result = deleteProduct(pdtid);
+                        int result = deleteProduct(pdtid, semid);
                         send(cfd, &result, sizeof(int), 0);
+
+                        struct Product *pdts = (struct Product *) malloc(256*sizeof(struct Product));
+                        int n = readProducts(&pdts);
+                        generateLog(pdts, n, user);
+
                     }else if(choice == 5){
                         int status = saveuser(user);
                         send(cfd, &status, sizeof(int), 0);
@@ -129,12 +140,15 @@ int main(){
                         int nfails = 0;
                         struct Product failedcart[10];
                         ret = lockCart(user.cart, user.nCart, failedcart, &nfails, semid);
+                        if(user.nCart <= 0) ret = 0;
                         send(cfd, &ret, sizeof(int), 0);
                         if(ret){
                             send(cfd, &user, sizeof(struct User), 0);
                             recv(cfd, &ret, sizeof(int), 0);
                             if(ret){
                                 purchaseAll(user.cart, user.nCart);
+                                generateReceipt(user.cart, user.nCart, user);
+                                user.nCart = 0;
                             }else{
                                 unlockCart(user.cart, user.nCart, semid);
                             }

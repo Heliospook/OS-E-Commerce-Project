@@ -1,0 +1,128 @@
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 19 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 19 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+10) a - 9 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+10) b - 9 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 8 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+--------------------------------
+LOG -------------- admin : me
+Here are the current stock levels : 
+0) Realme 9i - 18 left
+1) iPhone 14 - 7 left
+2) Samsung s22 - 16 left
+3) Xiaomi Note 10 - 8 left
+4) vivo v23 - 17 left
+5) asus rogphone - 8 left
+6) nothing 2 - 12 left
+7) Pixel 6a - 11 left
+8) POCO X4 - 12 left
+9) Oppo A3 - 8 left
+--------------------------------

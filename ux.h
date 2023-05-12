@@ -67,10 +67,10 @@ struct Product showCreateProduct(){
 
 void showCreateProductResult(int result){
     drawline();
-    if(result <= 0){
+    if(result < 0){
         printf("Pdt. creation failed.\n");
     }else{
-        printf("Pdt. created successfully with id = %d\n", result - 1);
+        printf("Pdt. created successfully with id = %d\n A log has been generated in the logs folder.\n", result);
     }
 }
 
@@ -88,8 +88,6 @@ struct Product showUpdateProduct(){
     struct Product pdt;
     printf("Enter the id of the product to be updated : \n");
     scanf("%d", &pdt.id);
-    printf("Enter product name : \n");
-    scanf("\n%[^\n]s", pdt.name);
     printf("Enter product quantity : \n");
     scanf("%d", &pdt.quantity);
     printf("Enter product price : \n");
@@ -99,7 +97,7 @@ struct Product showUpdateProduct(){
 
 void showUpdateProductResult(int result){
     if(result){
-        printf("Product updated successfully.\n");
+        printf("Product updated successfully.\n A log has been generated in the logs folder.\n");
     }else printf("Product updation failed.\n");
 }
 
@@ -112,7 +110,7 @@ int showDeleteProduct(){
 
 void showDeleteProductResult(int result){
     if(result){
-        printf("Product deleted successfully.\n");
+        printf("Product deleted successfully.\n A log has been generated in the logs folder.\n");
     }else printf("Such a product was not found.\n");
 }
 
@@ -183,7 +181,7 @@ int showCheckoutSuccess(int n, struct Product cart[10]){
 }
 
 void showCheckoutFailure(int n, struct Product cart[10]){
-    printf("Some products in your cart are not available. They are listed below :\n");
+    printf("Some products in your cart are not available . They are listed below :\n");
     for(int i=0;i<n;i++){
         printf("%d) %s : %d in cart - %0.2lf inr\n", cart[i].id, cart[i].name, cart[i].quantity, cart[i].price);
     }
@@ -194,7 +192,7 @@ void showCheckoutFailure(int n, struct Product cart[10]){
 
 void showPaymentResult(int status){
     if(status){
-        printf("Products were successfully purchased :)\n");
+        printf("Products were successfully purchased :)\n A receipt has been generated in the logs file.\n");
     }else{
         printf("Could not complete payment :(.\n");
     }

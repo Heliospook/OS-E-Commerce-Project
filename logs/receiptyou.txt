@@ -1,0 +1,10 @@
+
+RECEIPT -------------- user : you
+Here are the products purchased : 
+Total : 0.00
+--------------------------------
+RECEIPT -------------- user : you
+Here are the products purchased : 
+1) Realme 9i - 1 in number - 17000.99 inr
+Total : 17000.99
+--------------------------------

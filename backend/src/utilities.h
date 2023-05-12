@@ -4,12 +4,15 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include "headers.h"
+#include <time.h>
 
 #ifndef UTILITIES
 #define UTILITIES
 
 #define USERFILE "backend/database/users.dat"
 #define PRODFILE "backend/database/products.dat"
+#define LOGFILE "logs/adminlog"
+#define RECEIPTFILE "logs/receipt"
 
 union semun{
     int val;
@@ -138,7 +141,7 @@ int initsemaphores(int semid){
     return n;
 }
 
-int createProduct(struct Product* pdt){
+int createProduct(struct Product* pdt, int semid){
     int n = 0, newid = 0;
     FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
     fread(&n, sizeof(int), 1, productfile);
@@ -152,7 +155,6 @@ int createProduct(struct Product* pdt){
     fseek(productfile, 2*sizeof(int) + newid*sizeof(struct Product), SEEK_SET);
     fwrite(pdt, sizeof(struct Product), 1, productfile);
     
-    int ret = newid;
     struct Product temp;
     newid++;
     while(fread(&temp, sizeof(struct Product), 1, productfile)){
@@ -163,12 +165,21 @@ int createProduct(struct Product* pdt){
     fwrite(&newid, sizeof(int), 1, productfile);
     fclose(productfile);
 
-    return ret;
+    struct sembuf buf = {
+        pdt->id,
+        pdt->quantity,
+        IPC_NOWAIT
+    };
+    int ret = semop(semid, &buf, 1);
+    if(ret) return 0;
+
+    return pdt->id;
 }
 
 
 
-int updateProduct(struct Product pdt){
+int updateProduct(struct Product pdt, int semid){
+
     FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
 
     int address = 2*sizeof(int) + pdt.id * sizeof(struct Product);
@@ -180,15 +191,28 @@ int updateProduct(struct Product pdt){
         fclose(productfile);
         return 0;
     }
+
+    struct sembuf buf = {
+        pdt.id,
+        -temp.quantity,
+        IPC_NOWAIT
+    };
+    int ret = semop(semid, &buf, 1);
+    if(ret) return 0;
     
     fseek(productfile, address, SEEK_SET);
+    strcpy(pdt.name, temp.name);
     int wrt = fwrite(&pdt, sizeof(struct Product), 1, productfile);
     fclose(productfile);
     if(wrt == 0) return 0;
+    
+    buf.sem_op = pdt.quantity;
+    ret = semop(semid, &buf, 1);
+    if(ret) return 0;
     return 1;
 }
 
-int deleteProduct(int pdtid){
+int deleteProduct(int pdtid, int semid){
     FILE* productfile = (FILE *) fopen(PRODFILE, "rb+");
     int n = 0;
     fread(&n, sizeof(int), 1, productfile);
@@ -218,6 +242,13 @@ int deleteProduct(int pdtid){
     fseek(productfile, address, SEEK_SET);
     fwrite(&temp, sizeof(struct Product), 1, productfile);
     fclose(productfile);
+
+    struct sembuf buf = {
+        pdtid,
+        -temp.quantity,
+        IPC_NOWAIT
+    };
+    semop(semid, &buf, 1);
 
     return 1;
 }
@@ -333,6 +364,8 @@ int purchaseAll(struct Product cart[10], int n){
     return 1;
 }
 
+
+
 void writeone(){
     int n = 0;
     FILE* productfile = (FILE *) fopen(PRODFILE, "wb+");
@@ -349,6 +382,40 @@ void getsemvals(int semid){
         printf("%d ", val);
     }
     printf("\n");
+}
+
+void generateLog(struct Product *pdts, int n, struct User admin){
+    char logfilename[100];
+    strcpy(logfilename, LOGFILE);
+    strcat(logfilename, admin.username);
+    strcat(logfilename, ".txt");
+    FILE* logfile = fopen(logfilename, "a+");
+    fprintf(logfile, "LOG -------------- admin : %s\n", admin.username);
+    fprintf(logfile, "Here are the current stock levels : \n");
+    for(int i=0;i<n;i++){
+        fprintf(logfile, "%d) %s - %d left\n", pdts[i].id, pdts[i].name, pdts[i].quantity);
+    }
+    fprintf(logfile, "--------------------------------\n");
+    fclose(logfile);
+}   
+
+void generateReceipt(struct Product *pdts, int n, struct User user){
+    char receiptname[100];
+    strcpy(receiptname, RECEIPTFILE);
+    strcat(receiptname, user.username);
+    strcat(receiptname, ".txt");
+
+    FILE* receiptfile = fopen(receiptname, "a+");
+    fprintf(receiptfile, "RECEIPT -------------- user : %s\n", user.username);
+    fprintf(receiptfile, "Here are the products purchased : \n");
+    double total = 0;
+    for(int i=0;i<n;i++){
+        fprintf(receiptfile, "%d) %s - %d in number - %0.2lf inr\n", i + 1, pdts[i].name, pdts[i].quantity, pdts[i].price);
+        total += pdts[i].price;
+    }
+    fprintf(receiptfile, "Total : %0.2lf\n", total);
+    fprintf(receiptfile, "--------------------------------\n");
+    fclose(receiptfile);
 }
 
 #endif

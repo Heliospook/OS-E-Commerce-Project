@@ -9,6 +9,7 @@
 #include "ux.h"
 
 int main(){
+    system("clear");
     int cfd = socket(AF_INET, SOCK_STREAM, 0);
     if(cfd < 0){
         printf("Socket creation error.\n");
@@ -35,9 +36,15 @@ int main(){
     recv(cfd, &ret, sizeof(int), 0);
     showLoginResult(ret, user);
     
+    if(ret == -1){
+        exit(EXIT_FAILURE);
+    }
+    int turns = 0;
     if(ret >= 0){
         while(1){
             int choice = showmenu(ret);
+            if(turns %2 == 0) system("clear");
+            turns++;
             send(cfd, &choice, sizeof(int), 0);
             if(ret == 1){
                 if(choice == 1){
@@ -70,6 +77,7 @@ int main(){
                     int status;
                     recv(cfd, &status, sizeof(int), 0);
                     showSaveUserResult(status);
+                    exit(EXIT_SUCCESS);
                 }
             }else{
                 if(choice == 1){
@@ -122,6 +130,7 @@ int main(){
                     int status;
                     recv(cfd, &status, sizeof(int), 0);
                     showSaveUserResult(status);
+                    exit(EXIT_SUCCESS);
                 }
             }
         }
